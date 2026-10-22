@@ -1,0 +1,970 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Drink Zero Matcha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,600..900,0..100&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed colour bands from the brand palette, one fixed WebGL glass bottle travelling across them, type layered in front of and behind it. */
+:root{
+  --green:#7DB43A; --forest:#1D4B30; --cream:#F7F1E3; --lime:#E8F0B8; --black:#000000;
+  --bg:var(--lime); --fg:var(--forest);
+  --f-display:"Fraunces", "Cooper Black", Georgia, serif;
+  --f-body:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gut-l:max(16px, env(safe-area-inset-left, 0px));
+  --gut-r:max(16px, env(safe-area-inset-right, 0px));
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{overflow-x:clip}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.55;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;line-height:.92;margin:0;text-wrap:balance;letter-spacing:-.02em}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px dashed var(--fg);outline-offset:4px}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.in{padding-left:var(--gut-l);padding-right:var(--gut-r);max-width:1320px;margin:0 auto;width:100%}
+
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .14em .16em .06em;margin:-.04em -.14em -.16em -.06em}
+.wi{display:inline-block;will-change:transform}
+
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.back{position:relative;z-index:0}
+.front{position:relative;z-index:2}
+
+.nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;padding-top:16px;padding-left:var(--gut-l);padding-right:var(--gut-r);display:flex;align-items:center;justify-content:space-between;gap:12px;pointer-events:none}
+.nav > *{pointer-events:auto}
+.logo{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:1.55rem;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;white-space:nowrap}
+.logo i{width:.55em;height:.55em;border-radius:50%;background:var(--green);border:2px solid var(--fg);display:inline-block;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(.65)}}
+.nav ul{list-style:none;display:flex;gap:6px;margin:0;padding:6px;border-radius:999px;background:color-mix(in srgb,var(--fg) 10%,transparent);backdrop-filter:blur(8px)}
+.nav ul a,.cart{position:relative;overflow:hidden;isolation:isolate;transition:color .4s ease}
+.nav ul a{display:block;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.92rem}
+/* liquid fill: a wide rounded blob rises from below the pill */
+.nav ul a::before,.cart::before{content:"";position:absolute;z-index:-1;left:-60%;width:220%;height:400%;top:100%;border-radius:42%;background:var(--fg);transform:translateY(0) rotate(0deg);transition:transform .6s cubic-bezier(.65,0,.25,1)}
+.nav ul a:hover,.nav ul a:focus-visible,.nav ul a.active,.cart:hover,.cart:focus-visible{color:var(--bg)}
+.nav ul a:hover::before,.nav ul a:focus-visible::before,.nav ul a.active::before,.cart:hover::before,.cart:focus-visible::before{transform:translateY(-62%) rotate(160deg)}
+.cart:hover b,.cart:focus-visible b{background:var(--bg);color:var(--fg)}
+.cart{border:2px solid var(--fg);background:transparent;transition:color .4s ease;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer;display:inline-flex;gap:8px;align-items:center;text-decoration:none;white-space:nowrap}
+.cart b{background:var(--fg);color:var(--bg);transition:background .4s,color .4s;border-radius:999px;min-width:1.6em;height:1.6em;display:inline-grid;place-items:center;font-size:.8rem;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.nav ul{display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;padding:16px 26px;border-radius:999px;font-weight:800;font-size:1.02rem;text-decoration:none;border:2.5px solid var(--fg);cursor:pointer;transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s}
+.btn.solid{background:var(--fg);color:var(--bg);box-shadow:6px 6px 0 color-mix(in srgb,var(--fg) 30%,transparent)}
+.btn.ghost{background:transparent;color:var(--fg)}
+.btn:hover{transform:translate(-3px,-3px) rotate(-2deg)}
+
+/* HERO */
+.hero{min-height:100vh;min-height:100svh;display:grid;align-items:center;position:relative;overflow:hidden;padding-block:100px 56px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:24px;align-items:center}
+.hero-copy{display:grid;gap:22px;max-width:560px;position:relative;z-index:2}
+.hero h1{font-size:clamp(3rem,7vw,6.6rem)}
+.hero h1 em{font-style:italic;color:var(--green)}
+.hero .lede{font-size:1.1rem;max-width:42ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:22px;padding-top:6px}
+.hero-meta div{display:grid;gap:2px}
+.hero-meta b{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+/* the stage: no stacking context, so the WebGL canvas (z 1) sits between the disc (z 0) and the sticker (z 3) */
+.stage{position:relative;height:min(78vh,700px);min-height:420px;display:grid;place-items:center}
+.stage-bg{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
+.stage .disc{position:absolute;z-index:0;width:min(92%,560px);aspect-ratio:1;max-width:100%;border-radius:50%;background:var(--green);opacity:.55}
+.stage .ring{position:absolute;z-index:0;width:min(104%,640px);aspect-ratio:1;max-width:100%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--forest) 45%,transparent);animation:spin 60s linear infinite}
+.stage .shadow{position:absolute;z-index:0;bottom:6%;width:34%;height:5%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--black) 30%,transparent),transparent)}
+.sticker{position:absolute;z-index:3;left:0;bottom:12%;width:150px;height:150px;border-radius:50%;background:var(--forest);color:var(--lime);border:3px solid var(--black);box-shadow:6px 6px 0 var(--black);display:grid;place-items:center}
+.sticker .ring-text{position:absolute;inset:0;width:100%;height:100%;animation:spin 18s linear infinite}
+.sticker .core{position:relative;width:58%;aspect-ratio:1;border-radius:50%;background:var(--green);color:var(--forest);display:grid;place-content:center;text-align:center;gap:3px;transform:rotate(-8deg)}
+.sticker .core b{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:1.65rem;line-height:.85;letter-spacing:-.02em}
+.sticker .core small{font-family:var(--f-mono);font-weight:500;font-size:.58rem;letter-spacing:.14em}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scrollhint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
+.scrollhint i{width:22px;height:36px;border:2.5px solid var(--fg);border-radius:20px;position:relative}
+.scrollhint i::after{content:"";position:absolute;left:50%;top:6px;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:var(--fg);animation:wheel 1.4s ease-in-out infinite}
+@keyframes wheel{60%{transform:translateY(10px);opacity:0}}
+@media (max-width:860px){
+  .hero{padding-block:88px 32px;align-items:start}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:8px}
+  .stage{height:48svh;min-height:320px}
+  .sticker{width:112px;height:112px;bottom:6%}
+  .sticker .core b{font-size:1.25rem}
+  .sticker .core small{font-size:.5rem}
+  .scrollhint{display:none}
+  .hero .ctas .btn{padding:14px 20px}
+}
+/* MARQUEE */
+.marquee{position:relative;z-index:3;background:var(--forest);color:var(--lime);padding-block:16px;transform:rotate(-2.5deg) scale(1.05);overflow:hidden}
+.marquee .track{display:flex;width:max-content;animation:mq 24s linear infinite}
+.marquee span{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:clamp(1.6rem,4vw,3rem);padding-right:1.1em;white-space:nowrap;display:inline-flex;align-items:center;gap:1.1em}
+.marquee span::after{content:"";width:.42em;height:.7em;background:var(--green);border-radius:0 100% 0 100%;transform:rotate(20deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* INSIDE */
+.inside{min-height:100vh;min-height:100svh;display:grid;align-items:center;padding-block:110px 60px}
+.inside .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.inside .copy{grid-column:2;display:grid;gap:24px;min-width:0}
+.inside h2{font-size:clamp(2.8rem,6vw,5.4rem)}
+.inside h2 em{font-style:italic;color:var(--green)}
+.callouts{display:grid;gap:12px}
+.callout{will-change:transform,opacity;backface-visibility:hidden;display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;align-items:start;padding:16px 18px;border-radius:22px;border:2px solid color-mix(in srgb,var(--fg) 22%,transparent);background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.callout .dot{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:1.1rem;color:var(--forest)}
+.callout h3{font-family:var(--f-body);font-weight:800;font-size:1.2rem;line-height:1.2;margin-bottom:4px;letter-spacing:0}
+.callout p{opacity:.82;font-size:.96rem}
+@media (max-width:860px){
+  .inside{align-items:end}
+  .inside .grid{grid-template-columns:1fr}
+  .inside .copy{grid-column:1;padding-top:40vh}
+  .callout{grid-template-columns:42px minmax(0,1fr);gap:12px;padding:12px 14px}
+  .callout .dot{width:42px;height:42px;font-size:.9rem;border-radius:12px}
+}
+
+/* SHAKE */
+.shake{min-height:100vh;min-height:100svh;display:grid;align-items:center;padding-block:110px 60px;position:relative;overflow:hidden}
+.shake .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,.75fr) minmax(0,1fr);gap:32px;align-items:center}
+.shake h2{font-size:clamp(2.6rem,5vw,4.4rem)}
+.shake h2 em{font-style:italic;color:var(--green)}
+.shake .left,.shake .right{display:grid;gap:22px;align-content:center;min-width:0}
+.shake .left p{max-width:38ch}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;padding:14px 16px;border-radius:20px;border:2px solid color-mix(in srgb,var(--fg) 22%,transparent);transition:background .35s,color .35s,border-color .35s,box-shadow .35s;min-width:0}
+.steps li > div{min-width:0}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--f-mono);font-size:.85rem;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:2px solid currentColor}
+.steps li b{display:block;font-size:1.08rem}
+.steps li span{font-size:.92rem;opacity:.8}
+.steps li.on{background:var(--green);color:var(--black);border-color:var(--green);box-shadow:5px 5px 0 var(--black)}
+.shake-btn{justify-self:start}
+.shake-bg{position:absolute;inset:0;z-index:-1;display:grid;place-items:center;pointer-events:none;color:var(--fg)}
+.shake-bg svg{width:min(80vw,760px);height:auto;opacity:.08;animation:spin 50s linear infinite}
+@media (max-width:860px){
+  .shake .grid{grid-template-columns:minmax(0,1fr);gap:22px}
+  .shake .spacer{height:46vh;min-height:300px}
+  .steps li{grid-template-columns:38px minmax(0,1fr);gap:12px;padding:12px 14px}
+  .steps li::before{width:38px;height:38px;font-size:.78rem}
+  .steps li b{font-size:1rem}
+  .steps li span{font-size:.86rem}
+}
+/* MOMENTS */
+.moments{position:relative;overflow:hidden;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;gap:30px;padding-block:100px 50px}
+.moments h2{font-size:clamp(2.6rem,6vw,5.2rem)}
+.mtrack{display:flex;gap:24px;width:max-content;padding-left:var(--gut-l);padding-right:20vw;perspective:1200px}
+.mcard{width:min(76vw,370px);aspect-ratio:3/4;border-radius:30px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;color:var(--forest);border:3px solid var(--black);box-shadow:10px 10px 0 var(--black);position:relative;overflow:hidden;transform-style:preserve-3d}
+.mcard .time{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:clamp(3.2rem,8vw,4.4rem);line-height:.9;letter-spacing:-.03em}
+.mcard h3{font-family:var(--f-body);font-weight:800;font-size:1.4rem;line-height:1.15;letter-spacing:0}
+.mcard p{font-size:.96rem;margin-top:6px}
+.mcard svg{position:absolute;right:-30px;top:40px;width:210px;height:210px}
+.mcard > *{position:relative}
+@media (max-width:560px){.mcard{aspect-ratio:auto;min-height:420px}}
+
+/* FACTS */
+.facts{padding-block:130px 110px}
+.facts .grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:56px;align-items:start}
+.facts h2{font-size:clamp(2.6rem,5.5vw,4.8rem);margin-bottom:18px}
+.panel{background:var(--lime);color:var(--black);border:3px solid var(--black);padding:14px 18px 18px;box-shadow:12px 12px 0 var(--forest);transform:rotate(-1.5deg);max-width:100%}
+.panel .t{font-weight:800;font-size:clamp(1.6rem,5vw,2.1rem);line-height:1;border-bottom:1px solid var(--black);padding-bottom:6px}
+.panel .serv{display:flex;justify-content:space-between;font-weight:700;border-bottom:10px solid var(--black);padding-block:6px}
+.panel .row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--black);padding-block:5px;font-variant-numeric:tabular-nums}
+.panel .row.sub{padding-left:18px}
+.panel .row.thick{border-bottom-width:6px}
+.panel .ing{font-size:.82rem;line-height:1.4;margin-top:10px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+.stat{border-top:3px solid var(--fg);padding-top:12px;min-width:0}
+.stat .n{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1;font-variant-numeric:tabular-nums}
+.stat .n small{font-family:var(--f-mono);font-weight:500;font-size:.9rem;margin-left:4px}
+.slot{display:none}
+@media (max-width:860px){.facts .grid{grid-template-columns:1fr;gap:20px}.slot{display:block;height:46vh;min-height:300px}}
+
+/* BUY */
+.buy{min-height:100vh;min-height:100svh;display:grid;align-items:center;padding-block:110px 80px}
+.buy .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px}
+.buy form{grid-column:2;min-width:0;width:100%;display:grid;gap:20px;background:var(--cream);color:var(--forest);border:3px solid var(--black);border-radius:32px;padding:clamp(18px,4vw,30px);box-shadow:12px 12px 0 var(--black)}
+.buy h2{font-size:clamp(2.4rem,5vw,4.2rem)}
+.packs{display:grid;gap:10px;border:0;padding:0;margin:0;min-width:0}
+.packs legend{padding:0;margin-bottom:10px}
+.pack{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 16px;border:2.5px solid var(--forest);border-radius:18px;cursor:pointer;transition:background .2s}
+.pack input{appearance:none;width:22px;height:22px;border:2.5px solid var(--forest);border-radius:50%;margin:0;flex:none}
+.pack input:checked{background:var(--forest);box-shadow:inset 0 0 0 4px var(--cream)}
+.pack:has(input:checked){background:var(--lime)}
+.pack:has(input:checked) input:checked{box-shadow:inset 0 0 0 4px var(--lime)}
+.pack .txt{min-width:0}
+.pack strong{display:block;font-size:1.06rem}
+.pack span.s{display:block;font-size:.86rem;opacity:.75}
+.pack .p{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qtyrow{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.qty{display:inline-flex;align-items:center;border:2.5px solid var(--forest);border-radius:999px;overflow:hidden}
+.qty button{width:44px;height:44px;border:0;background:transparent;font-size:1.3rem;font-weight:800;cursor:pointer}
+.qty button:hover{background:var(--forest);color:var(--cream)}
+.qty output{min-width:2.4em;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.total{font-family:var(--f-display);font-weight:900;font-size:2.1rem;font-variant-numeric:tabular-nums}
+.buy form .btn.solid{background:var(--forest);color:var(--cream);border-color:var(--forest);box-shadow:6px 6px 0 var(--green)}
+@media (max-width:860px){
+  .buy .grid{grid-template-columns:minmax(0,1fr)}
+  .buy form{grid-column:1;box-shadow:8px 8px 0 var(--black);border-radius:26px}
+}
+@media (max-width:420px){
+  .pack{padding:12px;gap:10px}
+  .pack span.s{font-size:.8rem}
+}
+
+/* FOOTER */
+footer{padding-block:80px 40px;overflow:hidden;position:relative}
+.foot-giant{font-family:var(--f-display);font-weight:900;font-variation-settings:"SOFT" 100;font-size:clamp(5rem,20vw,20rem);line-height:.85;white-space:nowrap;display:flex;width:max-content;animation:mq 30s linear infinite reverse;letter-spacing:-.03em}
+.foot-giant span{padding-right:.3em}
+.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:40px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,180%);background:var(--black);color:var(--lime);padding:14px 22px;border-radius:999px;font-weight:700;z-index:80;transition:transform .45s cubic-bezier(.3,1.5,.5,1);width:max-content;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a href="#hero" class="logo" data-link>DRINK ZER<i></i></a>
+  <nav aria-label="Sections">
+    <ul>
+      <li><a href="#inside" data-link>Inside</a></li>
+      <li><a href="#shake" data-link>The shake</a></li>
+      <li><a href="#moments" data-link>Moments</a></li>
+      <li><a href="#facts" data-link>Facts</a></li>
+    </ul>
+  </nav>
+  <a href="#buy" class="cart" data-link>Cart <b id="cartCount">0</b></a>
+</header>
+
+<main>
+  <section class="hero" id="hero" data-theme-bg="#E8F0B8" data-theme-fg="#1D4B30">
+    <div class="in">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="mono">Matcha water · 190 ml glass</span>
+          <h1 data-split>Zero sugar. Full <em>matcha.</em></h1>
+          <p class="lede" data-fade>Ceremonial-grade matcha from Uji, cold-brewed into clean water. Shake it and watch it turn green. Born in Japan, bottled in India.</p>
+          <div class="ctas" data-fade>
+            <a class="btn solid" href="#buy" data-link data-hover>Get a pack →</a>
+            <a class="btn ghost" href="#shake" data-link data-hover>Watch the shake</a>
+          </div>
+          <div class="hero-meta" data-fade>
+            <div><b>0</b><span class="mono">kcal</span></div>
+            <div><b>0 g</b><span class="mono">sugar</span></div>
+            <div><b>190</b><span class="mono">ml glass</span></div>
+          </div>
+        </div>
+        <div class="stage" id="stage" aria-hidden="true">
+          <div class="stage-bg">
+            <div class="ring"></div>
+            <div class="disc"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="sticker">
+            <svg class="ring-text" viewBox="0 0 100 100"><defs><path id="c" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs><text font-family="DM Mono, monospace" font-weight="500" font-size="8" fill="#E8F0B8" textLength="236" lengthAdjust="spacing"><textPath href="#c">BORN IN JAPAN · BOTTLED IN INDIA ·</textPath></text></svg>
+            <div class="core"><b>Uji</b><small>MATCHA</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scrollhint mono" aria-hidden="true"><i></i>Scroll</div>
+  </section>
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="mq">
+      <span>Zero sugar</span><span>Uji matcha</span><span>Cold-brewed 12 h</span><span>190 ml glass</span><span>Zero sugar</span><span>Uji matcha</span><span>Cold-brewed 12 h</span><span>190 ml glass</span>
+    </div>
+  </div>
+
+  <section class="inside" id="inside" data-theme-bg="#000000" data-theme-fg="#F7F1E3">
+    <div class="in front">
+      <div class="grid">
+        <div class="copy">
+          <span class="mono">What's in the bottle</span>
+          <h2 data-split>Water, matcha, <em>nothing</em> else.</h2>
+          <div class="callouts">
+            <div class="callout"><span class="dot" style="background:#7DB43A">Uji</span><div><h3>Ceremonial-grade matcha</h3><p>Shade-grown leaf from Uji, Kyoto, stone-ground and cold-brewed for 12 hours so it never turns bitter.</p></div></div>
+            <div class="callout"><span class="dot" style="background:#E8F0B8">0 g</span><div><h3>Zero sugar, zero kcal</h3><p>No sugar and no sweeteners. The soft, grassy sweetness you taste comes from the tea itself.</p></div></div>
+            <div class="callout"><span class="dot" style="background:#F7F1E3">28</span><div><h3>28 mg of calm caffeine</h3><p>About a third of a cup of coffee. Matcha's L-theanine keeps the lift steady, without the jitters.</p></div></div>
+            <div class="callout"><span class="dot" style="background:#7DB43A">190</span><div><h3>190 ml, in glass</h3><p>Small enough to finish while it's cold. Glass keeps the taste clean and recycles endlessly.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shake" id="shake" data-theme-bg="#1D4B30" data-theme-fg="#F7F1E3">
+    <div class="shake-bg" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><path fill="currentColor" d="M100 4c10 18 26 20 40 12-2 16 8 30 26 30-10 14-6 32 10 40-16 8-16 26-4 38-18 2-26 18-20 34-16-6-30 4-34 22-8-16-26-18-38-6-2-18-18-26-34-20 6-16-4-30-22-34 16-8 18-26 6-38 18-2 26-18 20-34 16 6 30-4 34-22 4 0 8-14 16-22z"/></svg>
+    </div>
+    <div class="in front">
+      <div class="grid">
+        <div class="left">
+          <span class="mono">The shake</span>
+          <h2 data-split>Shake it. Watch it turn <em>green.</em></h2>
+          <p>Real matcha is a powder, so it settles. Every bottle leaves us clear on top. Three good shakes and the whole bottle turns bright, grassy green.</p>
+          <button class="btn ghost shake-btn" id="shakeBtn" type="button" data-hover>Give it a shake</button>
+        </div>
+        <div class="spacer" aria-hidden="true"></div>
+        <div class="right">
+          <ol class="steps" id="steps">
+            <li class="on"><div><b>Clear and still</b><span>Straight off the shelf</span></div></li>
+            <li><div><b>Matcha swirls in</b><span>Green clouds rise through the water</span></div></li>
+            <li><div><b>Shaken, ready</b><span>Bright green, smooth, cold</span></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="moments" id="moments" data-theme-bg="#7DB43A" data-theme-fg="#000000">
+    <div class="in front">
+      <span class="mono">Moments</span>
+      <h2 data-split>When a bottle shows up.</h2>
+    </div>
+    <div class="mtrack front" id="mtrack">
+      <article class="mcard" style="background:#E8F0B8">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="26" fill="#7DB43A"/><g stroke="#1D4B30" stroke-width="4" stroke-linecap="round"><line x1="50" y1="14" x2="50" y2="22"/><line x1="16" y1="56" x2="8" y2="56"/><line x1="84" y1="56" x2="92" y2="56"/><line x1="26" y1="30" x2="20" y2="24"/><line x1="74" y1="30" x2="80" y2="24"/></g></svg>
+        <span class="time">07:00</span>
+        <div><span class="mono">Morning</span><h3>Before the inbox opens</h3><p>Cold from the fridge, sipped on the balcony. A gentle start instead of a jolt.</p></div>
+      </article>
+      <article class="mcard" style="background:#F7F1E3">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="22" r="9" fill="#1D4B30"/><path d="M50 32v30M50 40l-22 12M50 40l22 12M50 62l-14 24M50 62l14 24" stroke="#1D4B30" stroke-width="6" stroke-linecap="round" fill="none"/></svg>
+        <span class="time">08:30</span>
+        <div><span class="mono">Post-yoga</span><h3>Mat rolled, bottle open</h3><p>Hydration with a little lift, and nothing sweet to undo the hour you just put in.</p></div>
+      </article>
+      <article class="mcard" style="background:#1D4B30;color:#F7F1E3">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="none" stroke="#7DB43A" stroke-width="6"/><path d="M50 26v24l16 10" stroke="#E8F0B8" stroke-width="6" stroke-linecap="round" fill="none"/></svg>
+        <span class="time">15:00</span>
+        <div><span class="mono">The slump</span><h3>Afternoon at the desk</h3><p>28 mg of steady caffeine when the third chai would be one too many.</p></div>
+      </article>
+      <article class="mcard" style="background:#000000;color:#E8F0B8">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#7DB43A"><path d="M30 10q8 14 0 20q-8-6 0-20z"/><path d="M62 28q8 14 0 20q-8-6 0-20z"/><path d="M40 52q8 14 0 20q-8-6 0-20z"/><path d="M75 62q8 14 0 20q-8-6 0-20z"/></g></svg>
+        <span class="time">18:15</span>
+        <div><span class="mono">Monsoon</span><h3>Long drive in the rain</h3><p>Matcha Mint in the cup holder, wipers on, playlist on shuffle.</p></div>
+      </article>
+      <article class="mcard" style="background:#E8F0B8">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M70 20a32 32 0 1 0 10 50a26 26 0 1 1-10-50z" fill="#1D4B30"/><circle cx="28" cy="22" r="3" fill="#7DB43A"/><circle cx="16" cy="44" r="2" fill="#7DB43A"/></svg>
+        <span class="time">23:00</span>
+        <div><span class="mono">Late study</span><h3>One more chapter</h3><p>Calm focus for the last stretch, without a sugar crash at midnight.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="facts" id="facts" data-theme-bg="#F7F1E3" data-theme-fg="#1D4B30">
+    <div class="in front">
+      <div class="grid">
+        <div>
+          <span class="mono">The small print, made big</span>
+          <h2 data-split>Read the back of the bottle.</h2>
+          <div class="panel">
+            <div class="t">Nutrition Information</div>
+            <div class="serv"><span>Per bottle</span><span>190 ml</span></div>
+            <div class="row thick"><b>Energy</b><b>0 kcal</b></div>
+            <div class="row"><b>Total fat</b><span>0 g</span></div>
+            <div class="row"><b>Sodium</b><span>5 mg</span></div>
+            <div class="row"><b>Carbohydrate</b><span>0 g</span></div>
+            <div class="row sub"><span>of which total sugars</span><span>0 g</span></div>
+            <div class="row sub"><span>of which added sugars</span><span>0 g</span></div>
+            <div class="row"><b>Protein</b><span>0 g</span></div>
+            <div class="row thick"><b>Caffeine</b><span>28 mg</span></div>
+            <p class="ing"><b>Ingredients:</b> purified water, matcha green tea (0.4%, Uji, Japan), natural flavour, vitamin C (antioxidant). No sugar, no sweeteners, no artificial colours.</p>
+          </div>
+        </div>
+        <div class="side">
+          <div class="slot" aria-hidden="true"></div>
+          <div class="stats">
+            <div class="stat"><div class="n"><span data-count="0">0</span><small>kcal</small></div><p>per 190 ml bottle, every edition</p></div>
+            <div class="stat"><div class="n"><span data-count="12">0</span><small>hours</small></div><p>of cold brewing, so it stays smooth, never bitter</p></div>
+            <div class="stat"><div class="n"><span data-count="28">0</span><small>mg</small></div><p>caffeine, about a third of a cup of coffee</p></div>
+            <div class="stat"><div class="n"><span data-count="4">0</span><small>°C</small></div><p>the temperature we think it tastes best at</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="buy" id="buy" data-theme-bg="#E8F0B8" data-theme-fg="#1D4B30">
+    <div class="in front">
+      <div class="grid">
+        <div class="slot" aria-hidden="true"></div>
+        <form id="buyForm">
+          <div>
+            <span class="mono">Order</span>
+            <h2 style="margin-top:8px">Get a pack.</h2>
+          </div>
+          <fieldset class="packs">
+            <legend class="mono">Pack size · 190 ml bottles</legend>
+            <label class="pack"><input type="radio" name="pack" id="pack-6" value="6" data-price="540"><span class="txt"><strong>6-pack</strong><span class="s">Try it out</span></span><span class="p">₹540</span></label>
+            <label class="pack"><input type="radio" name="pack" id="pack-12" value="12" data-price="1020" checked><span class="txt"><strong>12-pack</strong><span class="s">Most people pick this · save ₹60</span></span><span class="p">₹1,020</span></label>
+            <label class="pack"><input type="radio" name="pack" id="pack-24" value="24" data-price="1920"><span class="txt"><strong>24-pack</strong><span class="s">Stock the fridge · save ₹240</span></span><span class="p">₹1,920</span></label>
+          </fieldset>
+          <div class="qtyrow">
+            <div class="qty" role="group" aria-label="Quantity">
+              <button type="button" id="minus" aria-label="Fewer packs">−</button>
+              <output id="qty">1</output>
+              <button type="button" id="plus" aria-label="More packs">+</button>
+            </div>
+            <div style="text-align:right"><span class="mono">Total</span><div class="total" id="total">₹1,020</div></div>
+          </div>
+          <button class="btn solid" type="submit" data-hover>Add to cart</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-theme-bg="#000000" data-theme-fg="#7DB43A" class="front">
+  <div class="foot-giant" aria-hidden="true"><span>DRINK ZERO</span><span>DRINK ZERO</span><span>DRINK ZERO</span></div>
+  <div class="in foot-row">
+    <span class="mono">© 2026 Drink Zero · Born in Japan. Bottled in India.</span>
+    <span class="mono">Best served at 4°C · Recycle the glass</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasGsap = !!window.gsap && !!window.ScrollTrigger;
+const root = document.documentElement;
+const C = {green:'#7DB43A', forest:'#1D4B30', cream:'#F7F1E3', lime:'#E8F0B8', black:'#000000', paper:'#F1ECDD'};
+
+/* =========================================================
+   3D BOTTLE — proportions measured from the reference shots
+   (body radius = 1 unit; base at y=0, cap top at y=5.62)
+   ========================================================= */
+const canvas = document.getElementById('gl');
+let renderer, scene, camera, rootG, spinner, inner, greenMat, waterMat, swirl, dust, leaves = [], halfH = 3, halfW = 3;
+const BASE = .62, BOTTLE_H = 5.62;
+const ok3d = !!window.THREE && (()=>{try{return !!document.createElement('canvas').getContext('webgl')}catch(e){return false}})();
+
+const PROFILE = [[0,0],[.6,0],[.85,.03],[.96,.12],[1,.26],[1,3.93],[.98,4.08],[.92,4.22],[.8,4.36],[.64,4.47],[.52,4.53],[.46,4.58],[.44,4.62],[.44,4.9]];
+function radiusAt(y){
+  for(let i=0;i<PROFILE.length-1;i++){
+    const [r0,y0] = PROFILE[i], [r1,y1] = PROFILE[i+1];
+    if(y >= y0 && y <= y1) return y1 === y0 ? Math.max(r0,r1) : r0 + (r1-r0)*(y-y0)/(y1-y0);
+  }
+  return .44;
+}
+function rr(x, X, Y, W, H, R){ x.beginPath(); x.moveTo(X+R,Y); x.arcTo(X+W,Y,X+W,Y+H,R); x.arcTo(X+W,Y+H,X,Y+H,R); x.arcTo(X,Y+H,X,Y,R); x.arcTo(X,Y,X+W,Y,R); x.closePath(); }
+function rand(seed){ return () => (seed = (seed*16807) % 2147483647) / 2147483647; }
+
+/* ---------- label artwork ---------- */
+function drawMiniBottle(x, x0, base, w, h){
+  const bodyTop = base - h*.62, neckH = h*.1, capH = h*.17;
+  x.fillStyle = C.forest;
+  rr(x, x0, bodyTop, w, base-bodyTop, w*.24); x.fill();
+  rr(x, x0+w*.27, bodyTop-neckH-2, w*.46, neckH+8, 3); x.fill();
+  x.fillStyle = C.green; rr(x, x0+w*.14, bodyTop-neckH-capH, w*.72, capH, 7); x.fill();
+  x.fillStyle = C.paper; rr(x, x0+w*.2, bodyTop+(base-bodyTop)*.28, w*.6, (base-bodyTop)*.36, 5); x.fill();
+}
+function drawCapO(x, cx, cy, r){
+  x.fillStyle = C.forest; x.beginPath();
+  const n = 24;
+  for(let i=0;i<=n*2;i++){ const a = i/(n*2)*Math.PI*2, R = i%2 ? r : r*.9; x.lineTo(cx+Math.cos(a)*R, cy+Math.sin(a)*R); }
+  x.fill();
+  x.fillStyle = C.paper; x.beginPath(); x.arc(cx, cy, r*.76, 0, Math.PI*2); x.fill();
+  x.save(); x.beginPath(); x.arc(cx, cy, r*.68, 0, Math.PI*2); x.clip();
+  x.fillStyle = C.forest; x.fillRect(cx-r, cy-r, r*2, r*2);
+  const wave = (yo, amp, col, ph) => { x.fillStyle = col; x.beginPath(); x.moveTo(cx-r, cy+r);
+    for(let u=-r;u<=r;u+=3){ x.lineTo(cx+u, cy + yo*r + Math.sin(u/r*Math.PI*1.1+ph)*r*amp); }
+    x.lineTo(cx+r, cy+r); x.closePath(); x.fill(); };
+  wave(-.02, .12, '#4E8A2C', 0); wave(.2, .1, C.green, 1.4);
+  x.restore();
+}
+function drawLabel(cv){
+  const x = cv.getContext('2d'), W = cv.width, H = cv.height;
+  x.clearRect(0,0,W,H);
+  x.fillStyle = C.paper; rr(x, 4, 4, W-8, H-8, 70); x.fill();
+  // paper grain
+  const R = rand(3);
+  x.save(); rr(x, 4, 4, W-8, H-8, 70); x.clip();
+  for(let i=0;i<5000;i++){ x.fillStyle = R() > .5 ? 'rgba(0,0,0,.025)' : 'rgba(255,255,255,.05)'; x.fillRect(R()*W, R()*H, 2, 2); }
+  x.restore();
+  // logo, two lines, fitted to 84% of label width
+  const fs = 300; x.font = `900 ${fs}px "Fraunces", Georgia, serif`; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+  const gap = fs*.02, wi = fs*.3;
+  const wDR = x.measureText('DR').width, wNK = x.measureText('NK').width, wZER = x.measureText('ZER').width, capR = fs*.39;
+  const l1 = wDR + gap*2 + wi + wNK, l2 = wZER + gap + capR*2, target = W*.84;
+  const sx1 = target / l1, sx2 = target / l2;
+  const b1 = H*.355, b2 = H*.52;
+  x.save(); x.translate((W-target)/2, b1); x.scale(sx1, 1);
+  x.fillStyle = C.forest; x.fillText('DR', 0, 0); drawMiniBottle(x, wDR+gap, 0, wi, fs*.76); x.fillStyle = C.forest; x.fillText('NK', wDR+gap*2+wi, 0);
+  x.restore();
+  x.save(); x.translate((W-target)/2, b2); x.scale(sx2, 1);
+  x.fillStyle = C.forest; x.fillText('ZER', 0, 0);
+  x.restore();
+  drawCapO(x, (W-target)/2 + (wZER+gap)*sx2 + capR*sx2, b2 - fs*.34, capR*Math.min(sx2,1.05));
+  // lines
+  x.textAlign = 'center'; x.fillStyle = C.forest;
+  x.font = '800 84px "Bricolage Grotesque", sans-serif';
+  if('letterSpacing' in x) x.letterSpacing = '16px';
+  x.fillText('MATCHA', W/2+8, H*.755);
+  if('letterSpacing' in x) x.letterSpacing = '0px';
+  x.font = '600 50px "Bricolage Grotesque", sans-serif';
+  x.fillText('Born in Japan. Bottled in India.', W/2, H*.845);
+  x.font = '600 56px "Bricolage Grotesque", sans-serif';
+  x.fillText('190 ml', W/2, H*.935);
+  // condensation on the paper
+  const D = rand(11);
+  for(let i=0;i<55;i++){
+    const dx = 40 + D()*(W-80), dy = 40 + D()*(H-80), dr = 4 + D()*D()*16;
+    x.fillStyle = 'rgba(0,0,0,.06)'; x.beginPath(); x.ellipse(dx+1.5, dy+2.5, dr, dr*1.15, 0, 0, Math.PI*2); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.45)'; x.beginPath(); x.ellipse(dx, dy, dr, dr*1.15, 0, 0, Math.PI*2); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.9)'; x.beginPath(); x.arc(dx-dr*.35, dy-dr*.42, dr*.26, 0, Math.PI*2); x.fill();
+  }
+}
+function drawPaperBack(cv){
+  const x = cv.getContext('2d'); x.clearRect(0,0,cv.width,cv.height);
+  x.fillStyle = '#E6E0CF'; rr(x, 4, 4, cv.width-8, cv.height-8, 70); x.fill();
+}
+function drawCap(cv){
+  const x = cv.getContext('2d'), W = cv.width, H = cv.height;
+  x.fillStyle = C.green; x.fillRect(0,0,W,H);
+  const ribs = 72, w = W/ribs;
+  for(let i=0;i<ribs;i++){
+    const g = x.createLinearGradient(i*w,0,(i+1)*w,0);
+    g.addColorStop(0,'rgba(0,0,0,.22)'); g.addColorStop(.35,'rgba(255,255,255,.22)'); g.addColorStop(.6,'rgba(255,255,255,.05)'); g.addColorStop(1,'rgba(0,0,0,.22)');
+    x.fillStyle = g; x.fillRect(i*w, H*.22, w, H*.7);
+  }
+  x.fillStyle = 'rgba(0,0,0,.28)'; x.fillRect(0, H*.18, W, H*.04);
+}
+function drawLiquidTex(cv){
+  const x = cv.getContext('2d'), W = cv.width, H = cv.height, R = rand(5);
+  x.fillStyle = C.green; x.fillRect(0,0,W,H);
+  for(let i=0;i<9000;i++){
+    const v = R(); x.fillStyle = v > .66 ? 'rgba(170,215,90,.5)' : v > .33 ? 'rgba(60,110,30,.35)' : 'rgba(110,170,50,.5)';
+    const s = 1 + R()*3; x.fillRect(R()*W, R()*H, s, s);
+  }
+}
+function canvasTex(w, h, fn){ const c = document.createElement('canvas'); c.width = w; c.height = h; fn(c); const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t; }
+function spriteTex(){
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  const g = x.createRadialGradient(32,32,0,32,32,32); g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(.5,'rgba(255,255,255,.5)'); g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0,0,64,64); return new THREE.CanvasTexture(c);
+}
+
+function initThree(){
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(35, 1, .1, 100);
+  camera.position.set(0, 0, 10);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x2a5a36, 1));
+  const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(3, 5, 7); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xe8f0b8, .6); fill.position.set(-6, 1, 3); scene.add(fill);
+  const back = new THREE.DirectionalLight(0xffffff, .7); back.position.set(0, 3, -6); scene.add(back);
+
+  rootG = new THREE.Group(); spinner = new THREE.Group(); inner = new THREE.Group();
+  inner.position.y = -BOTTLE_H/2; spinner.add(inner); rootG.add(spinner); scene.add(rootG);
+  const V2 = a => a.map(p => new THREE.Vector2(p[0], p[1]));
+
+  /* water + green liquid (same shape, crossfaded by the shake) */
+  const liqPts = V2([[0,.14],[.82,.14],[.92,.2],[.955,.32],[.955,3.92],[.935,4.06],[.88,4.19],[.77,4.32],[.62,4.42],[.48,4.49],[.41,4.52],[0,4.52]]);
+  const liqGeo = new THREE.LatheGeometry(liqPts, 72);
+  waterMat = new THREE.MeshPhysicalMaterial({color:0xeef6ff, transparent:true, opacity:.08, roughness:.05, depthWrite:false});
+  const water = new THREE.Mesh(liqGeo, waterMat); water.renderOrder = 1; inner.add(water);
+  const lt = canvasTex(512, 512, drawLiquidTex); lt.wrapS = lt.wrapT = THREE.RepeatWrapping; lt.repeat.set(3, 3);
+  greenMat = new THREE.MeshStandardMaterial({map:lt, color:0xffffff, roughness:.35, transparent:true, opacity:0, emissive:0x3d6e1c, emissiveIntensity:.25, depthWrite:false});
+  const green = new THREE.Mesh(liqGeo, greenMat); green.renderOrder = 2; inner.add(green);
+  // meniscus line in the neck
+  const men = new THREE.Mesh(new THREE.TorusGeometry(.41, .012, 6, 48), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:.6, depthWrite:false}));
+  men.rotation.x = Math.PI/2; men.position.y = 4.52; men.renderOrder = 3; inner.add(men);
+
+  /* matcha swirl: soft puffs that billow down from the neck */
+  const N = 1500, R = rand(23);
+  const aR = new Float32Array(N), aTh = new Float32Array(N), aY = new Float32Array(N), aSeed = new Float32Array(N), aSize = new Float32Array(N), pos = new Float32Array(N*3);
+  for(let i=0;i<N;i++){ aR[i] = Math.sqrt(R()); aTh[i] = R()*Math.PI*2; aY[i] = Math.pow(R(), .8); aSeed[i] = R(); aSize[i] = R() < .3 ? .28 + R()*.35 : .05 + R()*.1; }
+  const sg = new THREE.BufferGeometry();
+  sg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  [['aR',aR],['aTh',aTh],['aY',aY],['aSeed',aSeed],['aSize',aSize]].forEach(([n,a]) => sg.setAttribute(n, new THREE.BufferAttribute(a, 1)));
+  swirl = new THREE.Points(sg, new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false,
+    uniforms:{uTime:{value:0}, uMix:{value:0}, uPx:{value:800}, uScale:{value:1}, uShake:{value:0}, uC1:{value:new THREE.Color(C.green)}, uC2:{value:new THREE.Color('#A9D45E')}, uC3:{value:new THREE.Color('#4E8A2C')}},
+    vertexShader:`
+      uniform float uTime,uMix,uPx,uScale,uShake; attribute float aR,aTh,aY,aSeed,aSize; varying float vA,vS;
+      void main(){
+        float reveal = clamp(uMix,0.,1.);
+        float top = 4.45, bottom = .7;
+        float y = top - aY*(top-bottom)*reveal + sin(uTime*.5+aSeed*12.)*.06;
+        float lobe = .55 + .45*sin(aSeed*31. + aY*7. + uTime*.35);
+        float spread = mix(.06, .92, smoothstep(0.,.55,aY*reveal + uShake*.5)) * lobe;
+        float neck = y > 3.95 ? mix(.9, .4, clamp((y-3.95)/.6,0.,1.)) : .9;
+        float r = min(aR*spread*1.35, neck);
+        float th = aTh + uTime*(.18+aSeed*.25)*(1.+uShake*6.) + aY*4.;
+        vec4 mv = modelViewMatrix*vec4(sin(th)*r, y, cos(th)*r, 1.);
+        gl_Position = projectionMatrix*mv;
+        gl_PointSize = aSize*uScale*uPx / -mv.z;
+        vA = smoothstep(0.,.2,uMix)*(1.-smoothstep(1.25,1.85,uMix))*(.3+.7*aSeed);
+        vS = aSeed;
+      }`,
+    fragmentShader:`
+      uniform vec3 uC1,uC2,uC3; varying float vA,vS;
+      void main(){ float d = length(gl_PointCoord-.5); float a = smoothstep(.5,0.,d);
+        vec3 c = vS < .33 ? uC3 : (vS < .66 ? uC1 : uC2);
+        gl_FragColor = vec4(c, a*vA*.6); }`
+  }));
+  swirl.frustumCulled = false; swirl.renderOrder = 2; inner.add(swirl);
+
+  /* glass */
+  const glassGeo = new THREE.LatheGeometry(V2(PROFILE), 96);
+  const glass = new THREE.Mesh(glassGeo, new THREE.MeshPhysicalMaterial({color:0xffffff, transparent:true, opacity:.14, roughness:.03, metalness:0, clearcoat:1, clearcoatRoughness:.03, side:THREE.DoubleSide, depthWrite:false}));
+  glass.renderOrder = 4; inner.add(glass);
+  const rim = new THREE.Mesh(glassGeo, new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false,
+    vertexShader:`varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
+    fragmentShader:`varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1.-abs(dot(normalize(vN),normalize(vV))), 2.6); gl_FragColor = vec4(vec3(1.), f*.75); }`
+  }));
+  rim.renderOrder = 5; inner.add(rim);
+  // thick glass base
+  const baseRing = new THREE.Mesh(new THREE.TorusGeometry(.86, .1, 12, 64), new THREE.MeshPhysicalMaterial({color:0xffffff, transparent:true, opacity:.28, roughness:.05, clearcoat:1, depthWrite:false}));
+  baseRing.rotation.x = Math.PI/2; baseRing.position.y = .1; baseRing.renderOrder = 4; inner.add(baseRing);
+  // neck flange + threads
+  const glassSolid = new THREE.MeshPhysicalMaterial({color:0xffffff, transparent:true, opacity:.38, roughness:.04, clearcoat:1, depthWrite:false});
+  const flange = new THREE.Mesh(new THREE.LatheGeometry(V2([[.44,4.7],[.58,4.72],[.61,4.76],[.6,4.81],[.46,4.83]]), 64), glassSolid);
+  flange.renderOrder = 4; inner.add(flange);
+  for(let i=0;i<2;i++){ const t = new THREE.Mesh(new THREE.TorusGeometry(.455, .018, 6, 48), glassSolid); t.rotation.x = Math.PI/2; t.position.y = 4.86 + i*.05; inner.add(t); }
+
+  /* label (front arc) + paper back */
+  const LW = 2.12, LH = 2.71, LY = 2.12;
+  const labTex = canvasTex(1200, 1534, drawLabel); labTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const backTex = canvasTex(256, 328, drawPaperBack);
+  const labGeo = new THREE.CylinderGeometry(1.012, 1.012, LH, 72, 1, true, -LW/2, LW);
+  const lab = new THREE.Mesh(labGeo, new THREE.MeshStandardMaterial({map:labTex, transparent:true, alphaTest:.5, roughness:.7}));
+  lab.position.y = LY; lab.renderOrder = 3; inner.add(lab);
+  const labBack = new THREE.Mesh(labGeo, new THREE.MeshStandardMaterial({map:backTex, transparent:true, alphaTest:.5, roughness:1, side:THREE.BackSide}));
+  labBack.position.y = LY; labBack.scale.set(.998, 1, .998); inner.add(labBack);
+  // identical label on the opposite side of the bottle
+  const lab2 = lab.clone(); lab2.rotation.y = Math.PI; inner.add(lab2);
+  const labBack2 = labBack.clone(); labBack2.rotation.y = Math.PI; inner.add(labBack2);
+
+  /* cap: ribbed side, flat top, tamper band */
+  const capTex = canvasTex(1024, 128, drawCap);
+  const capMat = new THREE.MeshStandardMaterial({map:capTex, bumpMap:capTex, bumpScale:.015, roughness:.38});
+  const cap = new THREE.Mesh(new THREE.LatheGeometry(V2([[.5,4.9],[.6,4.9],[.615,4.93],[.615,5.0],[.59,5.03],[.595,5.54],[.585,5.6],[.555,5.625]]), 96), capMat);
+  inner.add(cap);
+  const capTop = new THREE.Mesh(new THREE.CircleGeometry(.56, 64), new THREE.MeshStandardMaterial({color:C.green, roughness:.32}));
+  capTop.rotation.x = -Math.PI/2; capTop.position.y = 5.624; inner.add(capTop);
+
+  /* condensation droplets over glass and label */
+  const dropMat = new THREE.MeshPhysicalMaterial({color:0xffffff, transparent:true, opacity:.6, roughness:0, clearcoat:1, depthWrite:false});
+  const DN = 320, drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 10, 8), dropMat, DN), o = new THREE.Object3D(), D = rand(41);
+  for(let i=0;i<DN;i++){
+    const y = .2 + D()*4.3, th = (D()*2-1)*Math.PI;
+    const thB = Math.abs(th) > Math.PI/2 ? Math.PI - Math.abs(th) : Math.abs(th);
+    const onLabel = thB < LW/2 && Math.abs(y-LY) < LH/2;
+    const r = (onLabel ? 1.012 : radiusAt(y)) + .006;
+    const s = .012 + D()*D()*.05;
+    o.position.set(Math.sin(th)*r, y, Math.cos(th)*r);
+    o.lookAt(Math.sin(th)*5, y, Math.cos(th)*5);
+    o.scale.set(s, s*1.25, s*.45); o.updateMatrix(); drops.setMatrixAt(i, o.matrix);
+  }
+  drops.renderOrder = 6; inner.add(drops);
+
+  /* fixed studio highlights (do not spin with the bottle) */
+  const hl = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:.5, depthWrite:false});
+  [[-1.28,.07,.55],[1.12,.045,.35]].forEach(([th, w, op]) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(1.03,1.03,3.4,4,1,true, th, w), hl.clone()); m.material.opacity = op;
+    m.position.y = 2.15 - BOTTLE_H/2; m.renderOrder = 7; rootG.add(m);
+  });
+
+  /* orbiting matcha dust + a few leaves, contained around the bottle */
+  const DN2 = 160, dp = new Float32Array(DN2*3), dd = new Float32Array(DN2), DR = rand(77);
+  for(let i=0;i<DN2;i++){ const a = DR()*Math.PI*2, r = 1.7 + DR()*1.2, y = (DR()-.5)*5.4; dp[i*3] = Math.cos(a)*r; dp[i*3+1] = y; dp[i*3+2] = Math.sin(a)*r; dd[i] = DR(); }
+  const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(dp, 3));
+  dust = new THREE.Points(dg, new THREE.PointsMaterial({color:C.green, size:.09, map:spriteTex(), transparent:true, depthWrite:false, opacity:.9}));
+  rootG.add(dust);
+  const leafGeo = new THREE.SphereGeometry(1, 24, 12);
+  [[2.6,1.7,.3,C.green],[-2.6,-.5,.26,C.forest],[2.4,-2.2,.22,C.green]].forEach(([x,y,s,c],i) => {
+    const m = new THREE.Mesh(leafGeo, new THREE.MeshStandardMaterial({color:c, roughness:.5}));
+    m.scale.set(s*1.3, s*.1, s*.5); m.userData = {x, y, ph:i*2.1}; leaves.push(m); rootG.add(m);
+  });
+  resize();
+}
+
+function resize(){
+  if(!renderer) return;
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix();
+  halfH = Math.tan(camera.fov*Math.PI/360) * 10; halfW = halfH * camera.aspect;
+  swirl.material.uniforms.uPx.value = renderer.getDrawingBufferSize(new THREE.Vector2()).y / (2*Math.tan(camera.fov*Math.PI/360));
+  buildAnchors();
+}
+
+/* =========================================================
+   CHOREOGRAPHY  (mix: 0 clear → 1 swirl → 2 shaken green)
+   ========================================================= */
+const STATES = {
+  desk:{
+    inside:{x:-.48,y:0,s:1.02,spin:1,tilt:-.08,mix:0},
+    insideEnd:{x:-.48,y:0,s:1.02,spin:2.5,tilt:.08,mix:1},
+    shake:{x:0,y:0,s:1.08,spin:3,tilt:0,mix:1},
+    shakeEnd:{x:0,y:0,s:1.08,spin:3.5,tilt:0,mix:2},
+    moments:{x:.25,y:1.9,s:.6,spin:4.5,tilt:.5,mix:2},
+    momentsEnd:{x:-.25,y:1.9,s:.6,spin:5,tilt:-.5,mix:2},
+    facts:{x:.5,y:-.02,s:.98,spin:6,tilt:-.1,mix:2},
+    buy:{x:-.45,y:0,s:1.02,spin:7,tilt:.1,mix:2},
+    end:{x:0,y:.2,s:.8,spin:8,tilt:0,mix:2}
+  },
+  mob:{
+    inside:{x:0,y:.52,s:.46,spin:1,tilt:-.06,mix:0},
+    insideEnd:{x:0,y:.52,s:.46,spin:2.5,tilt:.06,mix:1},
+    shake:{x:0,y:.06,s:.58,spin:3,tilt:0,mix:1},
+    shakeEnd:{x:0,y:.06,s:.58,spin:3.5,tilt:0,mix:2},
+    moments:{x:0,y:1.9,s:.45,spin:4.5,tilt:.5,mix:2},
+    momentsEnd:{x:0,y:1.9,s:.45,spin:5,tilt:-.5,mix:2},
+    facts:{x:0,y:.52,s:.52,spin:6,tilt:-.1,mix:2},
+    buy:{x:0,y:.54,s:.52,spin:7,tilt:.1,mix:2},
+    end:{x:0,y:.2,s:.5,spin:8,tilt:0,mix:2}
+  }
+};
+/* Places the bottle inside a page element ("slot"), as seen at a given scroll position */
+function slotState(el, scroll, extra){
+  const r = el.getBoundingClientRect(), pageTop = r.top + scrollY;
+  const cx = r.left + r.width/2, cy = pageTop + r.height/2 - scroll;
+  const wpp = (2*halfH) / innerHeight;
+  return Object.assign({
+    x:(cx - innerWidth/2) / (innerWidth/2),
+    y:-(cy - innerHeight/2) / (innerHeight/2),
+    s:Math.min(1.25, (r.height*.8*wpp) / (BOTTLE_H*BASE))
+  }, extra);
+}
+/* Two anchors that make the bottle ride along with a slot as the page scrolls past it */
+function track(el, extraA, extraB){
+  const vh = innerHeight, r = el.getBoundingClientRect(), c = r.top + scrollY + r.height/2;
+  const A = c - vh/2 - vh*.32, B = c - vh/2 + vh*.32;
+  return [[A, slotState(el, A, extraA), 1], [B, slotState(el, B, extraB), 0]];
+}
+
+let anchors = [[0, Object.assign({}, STATES.desk.inside)]];
+const cur = {x:.45,y:0,s:1,spin:0,tilt:.06,mix:0};
+const st = {};
+const smooth = t => t*t*(3-2*t);
+let anchorsReady = false;
+
+function buildAnchors(){
+  if(!renderer) return;
+  const vh = innerHeight, mob = innerWidth < 860, T = mob ? STATES.mob : STATES.desk;
+  const stage = document.getElementById('stage');
+  const lift = vh*.35;
+  const h0 = slotState(stage, 0, {spin:0, tilt:.05, mix:0});
+  const h1 = slotState(stage, lift, {spin:.25, tilt:.05, mix:0});
+  const a = [[0, h0, 1], [lift, h1, 0]];
+  if(hasGsap && st.inside){
+    const max = ScrollTrigger.maxScroll(window);
+    a.push([st.inside.start, T.inside], [st.inside.end, T.insideEnd]);
+    if(mob){
+      a[a.length-1][2] = 1;
+      a.push([st.inside.end + vh*.6, Object.assign({}, T.insideEnd, {y: T.insideEnd.y + 1.2})]);
+      a.push(...track(document.querySelector('#shake .spacer'), {spin:3, tilt:0, mix:1}, {spin:3.6, tilt:0, mix:2}));
+      a.push([st.moments.start, T.moments], [st.moments.end, T.momentsEnd]);
+      a.push(...track(document.querySelector('#facts .slot'), {spin:6, tilt:-.05, mix:2}, {spin:6.4, tilt:.05, mix:2}));
+      a.push(...track(document.querySelector('#buy .slot'), {spin:7, tilt:.05, mix:2}, {spin:7.4, tilt:-.05, mix:2}));
+    } else {
+      a.push([st.shake.start, T.shake], [st.shake.start + vh*.55, T.shakeEnd],
+             [st.moments.start, T.moments], [st.moments.end, T.momentsEnd],
+             [st.facts.start + vh*.1, T.facts], [Math.min(st.buy.start, max - 2), T.buy], [max, T.end]);
+    }
+  }
+  for(let i=1;i<a.length;i++){ if(a[i][0] <= a[i-1][0]) a[i][0] = a[i-1][0] + 1; }
+  anchors = a;
+  if(!anchorsReady){ Object.assign(cur, targetAt(scrollY)); anchorsReady = true; }
+}
+function targetAt(y){
+  if(y <= anchors[0][0]) return anchors[0][1];
+  for(let i=0;i<anchors.length-1;i++){
+    const [p0, A, lin] = anchors[i], [p1, B] = anchors[i+1];
+    if(y >= p0 && y <= p1){
+      const r = (y-p0)/(p1-p0), t = lin ? r : smooth(r), o = {};
+      for(const k in A) o[k] = A[k] + (B[k]-A[k])*t;
+      return o;
+    }
+  }
+  return anchors[anchors.length-1][1];
+}
+const mouse = {x:0,y:0,tx:0,ty:0};
+addEventListener('pointermove', e => { mouse.tx = e.clientX/innerWidth*2-1; mouse.ty = e.clientY/innerHeight*2-1; });
+const intro = {s: reduce ? 1 : 0, r: reduce ? 0 : -2};
+const shakeFx = {a:0};
+let wobble = 0, stepIdx = -1;
+const steps = document.querySelectorAll('#steps li');
+
+function render(time){
+  if(!renderer) return;
+  const t = time*.001, y = scrollY, tgt = targetAt(y), k = reduce ? 1 : .1;
+  for(const p in cur) cur[p] += (tgt[p]-cur[p])*k;
+  mouse.x += (mouse.tx-mouse.x)*.06; mouse.y += (mouse.ty-mouse.y)*.06;
+  wobble *= .94;
+  const sh = shakeFx.a;
+  rootG.position.set(cur.x*halfW + Math.sin(t*38)*sh*.12, cur.y*halfH + (reduce?0:Math.sin(t*1.3)*.06) + Math.sin(t*31)*sh*.08, 0);
+  const sc = cur.s * intro.s * BASE;
+  rootG.scale.setScalar(sc);
+  rootG.rotation.set(mouse.y*.15, 0, cur.tilt + Math.sin(t*.8)*.025 + Math.sin(t*40)*sh*.22 + Math.sin(t*18)*wobble*.04);
+  spinner.rotation.y = cur.spin*Math.PI*2 + (reduce?0:t*.28) + mouse.x*.45 + intro.r + wobble;
+
+  // liquid state
+  const m = cur.mix;
+  greenMat.opacity = smooth(Math.min(1, Math.max(0, (m-1.05)/.8))) * .94;
+  const u = swirl.material.uniforms;
+  u.uTime.value = t; u.uMix.value = m; u.uScale.value = sc; u.uShake.value = sh;
+  dust.rotation.y = t*.08; dust.material.opacity = .55 + .35*Math.sin(t*.7);
+  leaves.forEach((l,i) => { const a = t*.25 + l.userData.ph; l.position.set(Math.cos(a)*Math.abs(l.userData.x), l.userData.y + Math.sin(t*.6+i)*.25, Math.sin(a)*Math.abs(l.userData.x)); l.rotation.set(t*.5+i, t*.3, t*.4); });
+
+  const si = m < .5 ? 0 : m < 1.5 ? 1 : 2;
+  if(si !== stepIdx){ stepIdx = si; steps.forEach((li,j) => li.classList.toggle('on', j === si)); }
+  renderer.render(scene, camera);
+}
+
+/* ---------- text splitting ---------- */
+function split(el){
+  const nodes = [...el.childNodes]; el.innerHTML = '';
+  nodes.forEach(n => {
+    const tag = n.nodeType === 1 ? n.tagName.toLowerCase() : 'span';
+    (n.textContent || '').split(/(\s+)/).forEach(wd => {
+      if(!wd) return;
+      if(/^\s+$/.test(wd)){ el.appendChild(document.createTextNode(' ')); return; }
+      const w = document.createElement('span'); w.className = 'w';
+      const wi = document.createElement(tag); wi.className = 'wi'; wi.textContent = wd;
+      w.appendChild(wi); el.appendChild(w);
+    });
+  });
+}
+document.querySelectorAll('[data-split]').forEach(split);
+
+function applyTheme(bg, fg){
+  if(hasGsap) gsap.to(root, {'--bg':bg, '--fg':fg, duration: reduce ? 0 : .7, ease:'power2.out', overwrite:true});
+  else { root.style.setProperty('--bg', bg); root.style.setProperty('--fg', fg); }
+}
+
+/* ---------- shake button ---------- */
+document.getElementById('shakeBtn').addEventListener('click', () => {
+  if(hasGsap && !reduce) gsap.fromTo(shakeFx, {a:1}, {a:0, duration:1.4, ease:'power2.out'});
+  wobble = .8;
+});
+
+/* ---------- buy form ---------- */
+let qty = 1, cartCount = 0;
+const qtyEl = document.getElementById('qty'), totalEl = document.getElementById('total');
+const fmt = n => '₹' + n.toLocaleString('en-IN');
+function updateTotal(){
+  const p = +document.querySelector('input[name="pack"]:checked').dataset.price;
+  qtyEl.textContent = qty; totalEl.textContent = fmt(p*qty);
+}
+document.getElementById('minus').onclick = () => { qty = Math.max(1, qty-1); updateTotal(); };
+document.getElementById('plus').onclick = () => { qty = Math.min(20, qty+1); updateTotal(); };
+document.querySelectorAll('input[name="pack"]').forEach(r => r.addEventListener('change', updateTotal));
+const toast = document.getElementById('toast'); let toastT;
+document.getElementById('buyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const pack = document.querySelector('input[name="pack"]:checked').value;
+  cartCount += qty;
+  const cc = document.getElementById('cartCount'); cc.textContent = cartCount;
+  if(hasGsap) gsap.fromTo(cc, {scale:1.8, rotate:-20}, {scale:1, rotate:0, duration:.6, ease:'elastic.out(1,.4)'});
+  toast.textContent = `Added ${qty} × ${pack}-pack of Drink Zero Matcha to your cart`;
+  toast.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('show'), 2600);
+  if(hasGsap && !reduce) gsap.fromTo(shakeFx, {a:.6}, {a:0, duration:1, ease:'power2.out'});
+});
+
+
+/* ---------- GSAP + ScrollTrigger ---------- */
+function initScroll(){
+  gsap.registerPlugin(ScrollTrigger);
+  let lenis = null;
+  if(window.Lenis && !reduce){
+    lenis = new Lenis({lerp:.1, smoothWheel:true});
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t*1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  document.querySelectorAll('[data-link]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'), tgt = document.querySelector(id);
+    if(!tgt) return; e.preventDefault();
+    const y = id === '#inside' ? st.inside.start : id === '#moments' ? st.moments.start : tgt.getBoundingClientRect().top + scrollY;
+    if(lenis) lenis.scrollTo(y, {duration:1.4}); else scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'});
+  }));
+
+
+  gsap.timeline({delay:.15})
+    .from('.stage .disc', {scale:0, duration:1, ease:'back.out(1.6)'})
+    .from('.stage .ring', {scale:.6, opacity:0, duration:1, ease:'power3.out'}, .1)
+    .to(intro, {s:1, r:0, duration:1.4, ease:'elastic.out(1,.55)'}, .25)
+    .from('#hero .wi', {yPercent:115, rotate:6, duration:.8, ease:'power4.out', stagger:.06}, .3)
+    .from('#hero [data-fade]', {y:30, opacity:0, duration:.7, ease:'power3.out', stagger:.1}, .65)
+    .from('.sticker', {scale:0, rotation:-90, duration:.9, ease:'back.out(2)'}, .9)
+    .from('.nav', {y:-40, opacity:0, duration:.6, ease:'power3.out'}, .4);
+
+  gsap.to('#hero .hero-copy', {y:-70, opacity:.15, ease:'none', scrollTrigger:{trigger:'#hero', start:'center center', end:'bottom top', scrub:true}});
+  gsap.to('.stage-bg', {scale:1.25, opacity:0, ease:'none', scrollTrigger:{trigger:'#hero', start:'center center', end:'bottom top', scrub:true}});
+  gsap.to('.sticker', {y:-80, opacity:0, ease:'none', scrollTrigger:{trigger:'#hero', start:'center center', end:'bottom top', scrub:true}});
+
+  const skewTo = gsap.quickTo('#mq', 'skewX', {duration:.4, ease:'power3'});
+  ScrollTrigger.create({onUpdate:self => skewTo(gsap.utils.clamp(-14,14, self.getVelocity()/-180))});
+
+  const insideTl = gsap.timeline({scrollTrigger:{trigger:'#inside', start:'top top', end:'+=200%', pin:true, scrub:1}});
+  insideTl.from('#inside .wi', {yPercent:115, rotate:5, stagger:.04, duration:.4, ease:'power3.out'})
+    .from('.callout', {y:70, opacity:0, scale:.97, stagger:.32, duration:.6, ease:'power2.out', force3D:true}, '>-0.1')
+    .to({}, {duration:.4});
+  st.inside = insideTl.scrollTrigger;
+
+  st.shake = ScrollTrigger.create({trigger:'#shake', start:'top top'});
+  gsap.from('#shake .wi', {yPercent:115, rotate:5, stagger:.05, duration:.8, ease:'power4.out', scrollTrigger:{trigger:'#shake', start:'top 60%'}});
+  gsap.from('#steps li', {y:40, opacity:0, stagger:.12, duration:.7, ease:'back.out(1.6)', clearProps:'transform,opacity', scrollTrigger:{trigger:'#steps', start:'top 95%', once:true}});
+
+  const track = document.getElementById('mtrack');
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+  const hTween = gsap.to(track, {x:() => -dist(), ease:'none', scrollTrigger:{trigger:'#moments', start:'top top', end:() => '+=' + dist(), pin:true, scrub:.8, invalidateOnRefresh:true}});
+  st.moments = hTween.scrollTrigger;
+  gsap.from('#moments .wi', {yPercent:115, stagger:.05, duration:.8, ease:'power4.out', scrollTrigger:{trigger:'#moments', start:'top 60%'}});
+  gsap.utils.toArray('.mcard').forEach((card, i) => {
+    gsap.fromTo(card, {rotateY:-35, rotateZ: i%2 ? 6 : -6, scale:.85, y:60},
+      {rotateY:0, rotateZ: i%2 ? -2 : 2, scale:1, y:0, ease:'power2.out',
+       scrollTrigger:{trigger:card, containerAnimation:hTween, start:'left 100%', end:'left 40%', scrub:true}});
+  });
+
+  st.facts = ScrollTrigger.create({trigger:'#facts', start:'top top'});
+  gsap.from('#facts .wi', {yPercent:115, stagger:.05, duration:.8, ease:'power4.out', scrollTrigger:{trigger:'#facts', start:'top 65%'}});
+  gsap.from('.panel', {rotate:-12, y:120, opacity:0, duration:1.1, ease:'back.out(1.4)', scrollTrigger:{trigger:'.panel', start:'top 88%'}});
+  gsap.from('.panel .row', {y:10, opacity:0, stagger:.05, duration:.4, scrollTrigger:{trigger:'.panel', start:'top 75%'}});
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const end = +el.dataset.count, o = {v:0};
+    ScrollTrigger.create({trigger:el, start:'top 90%', once:true, onEnter:() =>
+      gsap.to(o, {v:end, duration:1.6, ease:'power2.out', onUpdate:() => el.textContent = Math.round(o.v)})});
+  });
+  gsap.from('.stat', {y:50, opacity:0, stagger:.1, duration:.7, ease:'power3.out', clearProps:'transform,opacity', scrollTrigger:{trigger:'.stats', start:'top 95%', once:true}});
+
+  st.buy = ScrollTrigger.create({trigger:'#buy', start:'top top'});
+  gsap.from('#buyForm', {y:120, rotate:4, opacity:0, duration:1, ease:'back.out(1.3)', clearProps:'transform,opacity', scrollTrigger:{trigger:'#buyForm', start:'top 95%', once:true}});
+  gsap.from('.pack', {y:24, opacity:0, stagger:.1, duration:.5, ease:'power3.out', clearProps:'transform,opacity', scrollTrigger:{trigger:'.packs', start:'top 95%', once:true}});
+
+  document.querySelectorAll('[data-theme-bg]').forEach(sec => {
+    ScrollTrigger.create({trigger:sec, start:'top 50%', end:'bottom 50%', onToggle:self => {
+      if(self.isActive) document.querySelectorAll('.nav ul a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + sec.id));
+      if(self.isActive) applyTheme(sec.dataset.themeBg, sec.dataset.themeFg);
+    }});
+  });
+
+  ScrollTrigger.addEventListener('refresh', buildAnchors);
+  ScrollTrigger.refresh();
+}
+
+/* ---------- boot ---------- */
+updateTotal();
+const boot3d = () => {
+  if(!ok3d) return;
+  try { initThree(); addEventListener('resize', resize); } catch(e){ renderer = null; console.warn(e); }
+};
+const fontsReady = document.fonts ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]) : Promise.resolve();
+if(hasGsap) initScroll();
+fontsReady.then(() => {
+  boot3d();
+  if(hasGsap){ if(renderer) gsap.ticker.add(() => render(performance.now())); ScrollTrigger.refresh(); }
+  if(window.ResizeObserver){ let raf; new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => hasGsap ? ScrollTrigger.refresh() : buildAnchors()); }).observe(document.querySelector('.hero-grid')); }
+  if(document.fonts) document.fonts.ready.then(() => hasGsap ? ScrollTrigger.refresh() : buildAnchors());
+  else if(renderer){ intro.s = 1; (function loop(t){ render(t); requestAnimationFrame(loop); })(0); }
+});
+})();
+</script>
+
+</body></html>
